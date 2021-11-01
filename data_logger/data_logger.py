@@ -37,11 +37,24 @@ class DataLogger:
             AssertionError: if columns of dataframe to be appended do
             not match previous checkpoints.
         """
+        existing_keys = set(self._logger_data.keys())
+        new_keys = set(self._df_columns)
 
-        error_message = (
+        unspecified_keys = existing_keys - new_keys
+        misspecified_keys = new_keys - existing_keys
+
+        error_message_1 = (
             "Incorrect dataframe columns for merging.\n"
-            f"{set(self._logger_data.keys())} must match {set(self._df_columns)}"
+            f"{existing_keys} must match {new_keys}"
         )
+        error_message_2 = (
+            f"ADD (REMOVE) {unspecified_keys} TO ORIGINAL KEYS (FROM NEW KEYS)."
+        )
+        error_message_3 = (
+            f"ADD (REMOVE) {misspecified_keys} TO NEW KEYS (FROM ORIGINAL KEYS)."
+        )
+
+        error_message = ("\n").join([error_message_1, error_message_2, error_message_3])
 
         assert set(self._logger_data.keys()) == set(self._df_columns), error_message
 
