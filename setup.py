@@ -11,7 +11,7 @@ setuptools.setup(
     description="Data Logger Util",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/seblee97/data_loggeer",
+    url="https://github.com/seblee97/data_logger",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
