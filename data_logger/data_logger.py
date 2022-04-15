@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 import pandas as pd
@@ -11,10 +11,18 @@ class DataLogger:
     Data can be stored in a csv.
     """
 
-    def __init__(self, checkpoint_path: str, logfile_path: str, columns: List[str]):
+    def __init__(
+        self,
+        checkpoint_path: str,
+        logfile_path: str,
+        columns: List[str],
+        index: Optional[str] = None,
+    ):
         self._checkpoint_path = checkpoint_path
         self._logfile_path = logfile_path
         self._df_columns = columns
+        self._index = index
+
         self._logger_data = {}
 
     def write_scalar(self, tag: str, step: int, scalar: float) -> None:
@@ -62,9 +70,15 @@ class DataLogger:
 
         # only append header on first checkpoint/save.
         header = not os.path.exists(self._logfile_path)
-        pd.DataFrame(series_data).to_csv(
-            self._logfile_path, mode="a", header=header, index=False
-        )
+
+        if self._index is not None:
+            pd.DataFrame(series_data).set_index(self._index).to_csv(
+                self._logfile_path, mode="a", header=header, index=True
+            )
+        else:
+            pd.DataFrame(series_data).to_csv(
+                self._logfile_path, mode="a", header=header, index=False
+            )
 
         # reset logger in memory to empty.
         self._logger_data = {}
