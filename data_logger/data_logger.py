@@ -1,5 +1,5 @@
 import os
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -24,6 +24,14 @@ class DataLogger:
         self._index = index
 
         self._logger_data = {}
+
+    @property
+    def logger_data(self) -> Dict[str, np.ndarray]:
+        return self._logger_data
+
+    @logger_data.setter
+    def logger_data(self, logger_data: Dict[str, np.ndarray]):
+        self._logger_data = logger_data
 
     def write_scalar(self, tag: str, step: int, scalar: float) -> None:
         """Write (scalar) data to dictionary.
