@@ -26,12 +26,19 @@ class DataLogger:
         self._logger_data = {}
 
     @property
+    def logfile_path(self):
+        return self._logfile_path
+
+    @property
     def logger_data(self) -> Dict[str, np.ndarray]:
         return self._logger_data
 
     @logger_data.setter
     def logger_data(self, logger_data: Dict[str, np.ndarray]):
         self._logger_data = logger_data
+
+    def load_data(self):
+        return pd.read_csv(self._logfile_path)
 
     def write_scalar(self, tag: str, step: int, scalar: float) -> None:
         """Write (scalar) data to dictionary.
